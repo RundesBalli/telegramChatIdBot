@@ -32,6 +32,17 @@ if(empty($response)) {
   die();
 }
 
+/**
+ * Checking if a group invitation was done.
+ */
+if(isset($response['message']['my_chat_member'])) {
+  sendMessageToTelegram($response['message']['my_chat_member']['chat']['id'], $response['message']['my_chat_member']['chat']['id']);
+  die();
+}
+
+/**
+ * A private message was sent to the bot.
+ */
 sendMessageToTelegram($response['message']['chat']['id'], $response['message']['chat']['id']);
 die();
 ?>
