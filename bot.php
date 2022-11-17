@@ -28,15 +28,23 @@ if(empty($headers['X-Telegram-Bot-Api-Secret-Token']) OR $headers['X-Telegram-Bo
  */
 $content = file_get_contents("php://input");
 $response = json_decode($content, TRUE);
-if(empty($response)) {
+if(empty($response) OR (empty($response['message']) AND empty($response['my_chat_member']))) {
   die();
 }
 
 /**
  * Checking if a group invitation was done.
  */
-if(isset($response['message']['my_chat_member'])) {
+if(!empty($response['message']['my_chat_member'])) {
   sendMessageToTelegram('`'.$response['message']['my_chat_member']['chat']['id'].'`', $response['message']['my_chat_member']['chat']['id']);
+  die();
+}
+
+/**
+ * Checking if a channel invitation was done.
+ */
+if(!empty($response['my_chat_member'])) {
+  sendMessageToTelegram('`'.$response['my_chat_member']['chat']['id'].'`', $response['my_chat_member']['chat']['id']);
   die();
 }
 
